@@ -15,15 +15,16 @@ function Stream.from(array)
 end
 
 function Stream:iterate()
-    return self., self._data, nil
+    -- return self., self._data, nil
 end
 
 function Stream:to_table()
-    local table = {}
-    for key, value in pairs(self:iterate()) do
-        table[key] = value
-    end
-    return table
+    -- local table = {}
+    -- for key, value in pairs(self:iterate()) do
+    --     table[key] = value
+    -- end
+    -- return table
+    return self._data
 end
 
 --- @generic TKey
@@ -40,12 +41,5 @@ function Stream:where(predicate)
     end
     return Stream.from(result)
 end
-
-for key, value in Stream.from({}) do
-    print(key)
-    print(value)
-end
-
-pairs()
 
 return Stream

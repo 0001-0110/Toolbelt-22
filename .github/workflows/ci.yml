@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install Lua & luacheck
+      - name: Install lua & luacheck
         run: |
           sudo apt-get update
           sudo apt-get install -y luarocks
@@ -30,3 +30,15 @@ jobs:
         run: cargo install stylua
       - name: Run stylua
         run: stylua --check ./
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install lua
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y luarocks
+          sudo luarocks install luacheck
+      - name: Run testsuite
+        run: make test
