@@ -9,6 +9,13 @@ function utils.count(table)
     return count
 end
 
+--- Check if the given data is an integer
+--- @param data any
+--- @return boolean
+function utils.is_int(data)
+    return type(data) == "number" and math.floor(data) == data
+end
+
 --- @param data any
 function utils.is_list(data)
     if type(data) ~= "table" then

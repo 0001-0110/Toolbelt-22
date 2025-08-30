@@ -6,7 +6,7 @@ Stream.__index = Stream
 
 --- @generic TKey
 --- @generic TValue
---- @param iterator_factory fun(table: table<TKey, TValue>, previous_key: TKey): TKey, TValue
+--- @param iterator_factory fun(): fun(table: table<TKey, TValue>, previous_key: TKey): (TKey, TValue), table<TKey, TValue>, TKey
 --- @return Stream<TKey, TValue>
 local function create_stream(iterator_factory)
     local stream = { _iterator_factory = iterator_factory }
@@ -16,9 +16,12 @@ end
 
 --- @generic TKey
 --- @generic TValue
---- @param array table<TKey, TValue>
+--- @param table table<TKey, TValue>
 --- @return Stream<TKey, TValue>
 function Stream.from(table)
+    if type(table) ~= "table" then
+        error()
+    end
     return create_stream(function()
         return next, table, nil
     end)
@@ -40,7 +43,7 @@ end
 --- @generic TKey
 --- @generic TValue
 --- @param self Stream<TKey, TValue>
---- @return fun(table: table<TKey, TValue>, previous_key: TKey): Tkey, TValue, table<TKey, TValue>, TKey
+--- @return fun(table: table<TKey, TValue>, previous_key: TKey): (TKey, TValue), table<TKey, TValue>, TKey
 function Stream:iterate()
     -- Calls the factory to build the iterator, but still doesn't evaluate any values
     return self._iterator_factory()
@@ -117,6 +120,31 @@ function Stream:where(predicate)
             end
         end
         return where_iterator, table, previous_key
+    end
+    return create_stream(where_iterator_factory)
+end
+
+--- @generic TKey
+--- @generic TValue
+--- @param self Stream<TKey, TValue>
+--- @param count number
+--- @return Stream<TKey, TValue>
+function Stream:take(count)
+    if not utils.is_int(count) then
+        error("You can't take a decimal number of elements")
+    end
+
+    function take_iterator_factory()
+        local iterator, table, previous_key = self:iterate()
+        local remaining = count
+        function take_iterator(table, previous_key)
+            if remaining == 0 then
+                return nil
+            end
+            remaining = remaining - 1
+            return iterator(table, previous_key)
+        end
+        return take_iterator, table, previous_key
     end
     return create_stream(where_iterator_factory)
 end
