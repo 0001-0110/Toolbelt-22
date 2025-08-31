@@ -127,7 +127,7 @@ end
 --- @return Stream<TKey, TValue>
 function Stream:where(predicate)
     local function where_iterator_factory()
-        local iterator, table, previous_key = self:iterate()
+        local iterator, state, init_key = self:iterate()
         local function where_iterator(table, previous_key)
             while true do
                 local key, value = iterator(table, previous_key)
@@ -140,7 +140,7 @@ function Stream:where(predicate)
                 previous_key = key
             end
         end
-        return where_iterator, table, previous_key
+        return where_iterator, state, init_key
     end
     return create_stream(where_iterator_factory)
 end
@@ -156,7 +156,7 @@ function Stream:take(count)
     end
 
     local function take_iterator_factory()
-        local iterator, table, previous_key = self:iterate()
+        local iterator, state, init_key = self:iterate()
         local remaining = count
         local function take_iterator(table, previous_key)
             if remaining == 0 then
@@ -165,7 +165,7 @@ function Stream:take(count)
             remaining = remaining - 1
             return iterator(table, previous_key)
         end
-        return take_iterator, table, previous_key
+        return take_iterator, state, init_key
     end
     return create_stream(take_iterator_factory)
 end
