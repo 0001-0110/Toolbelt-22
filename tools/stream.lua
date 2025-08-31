@@ -64,6 +64,18 @@ end
 --- @generic TKey
 --- @generic TValue
 --- @param self Stream<TKey, TValue>
+--- @return table<number, TValue>
+function Stream:to_array()
+    local array = {}
+    for _, value in self:iterate() do
+        table.insert(array, value)
+    end
+    return array
+end
+
+--- @generic TKey
+--- @generic TValue
+--- @param self Stream<TKey, TValue>
 --- @param predicate (fun(key: TKey, value: TValue): boolean) | nil
 --- @return TKey | nil, TValue | nil
 function Stream:first_or_default(predicate)
@@ -105,9 +117,9 @@ end
 --- @param predicate fun(key: TKey, value: TValue): boolean
 --- @return Stream<TKey, TValue>
 function Stream:where(predicate)
-    function where_iterator_factory()
+    local function where_iterator_factory()
         local iterator, table, previous_key = self:iterate()
-        function where_iterator(table, previous_key)
+        local function where_iterator(table, previous_key)
             while true do
                 local key, value = iterator(table, previous_key)
                 if key == nil then
@@ -134,10 +146,10 @@ function Stream:take(count)
         error("You can't take a decimal number of elements")
     end
 
-    function take_iterator_factory()
+    local function take_iterator_factory()
         local iterator, table, previous_key = self:iterate()
         local remaining = count
-        function take_iterator(table, previous_key)
+        local function take_iterator(table, previous_key)
             if remaining == 0 then
                 return nil
             end
@@ -146,7 +158,7 @@ function Stream:take(count)
         end
         return take_iterator, table, previous_key
     end
-    return create_stream(where_iterator_factory)
+    return create_stream(take_iterator_factory)
 end
 
 return Stream
