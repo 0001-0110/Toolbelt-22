@@ -42,7 +42,7 @@ end
 function Stream.of(value)
     if value == nil then
         value = {}
-    elseif not utils.is_list(value) then
+    elseif not utils.is_array(value) then
         value = { value }
     end
 

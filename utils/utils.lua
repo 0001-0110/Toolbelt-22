@@ -16,8 +16,10 @@ function utils.is_int(data)
     return type(data) == "number" and math.floor(data) == data
 end
 
+--- Check if the given argument is an array, meaing it has continuous keys that start at 1
 --- @param data any
-function utils.is_list(data)
+--- @return boolean
+function utils.is_array(data)
     if type(data) ~= "table" then
         return false
     end
