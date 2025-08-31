@@ -1,12 +1,21 @@
 local utils = require("utils.utils")
 
+--- @generic TKey
+--- @generic TValue
+--- @alias Iterator fun(table: table<TKey, TValue>, previous_key: TKey): (TKey, TValue)
+
+--- @generic TKey
+--- @generic TValue
+--- @alias IteratorFactory fun(): Iterator<TKey, TValue>, table<TKey, TValue>, TKey
+
 --- @class Stream<TKey, TValue>
+--- @field _iterator_factory IteratorFactory
 local Stream = {}
 Stream.__index = Stream
 
 --- @generic TKey
 --- @generic TValue
---- @param iterator_factory fun(): fun(table: table<TKey, TValue>, previous_key: TKey): (TKey, TValue), table<TKey, TValue>, TKey
+--- @param iterator_factory IteratorFactory
 --- @return Stream<TKey, TValue>
 local function create_stream(iterator_factory)
     local stream = { _iterator_factory = iterator_factory }
@@ -43,7 +52,7 @@ end
 --- @generic TKey
 --- @generic TValue
 --- @param self Stream<TKey, TValue>
---- @return fun(table: table<TKey, TValue>, previous_key: TKey): (TKey, TValue), table<TKey, TValue>, TKey
+--- @return Iterator, table<TKey, TValue>, TKey
 function Stream:iterate()
     -- Calls the factory to build the iterator, but still doesn't evaluate any values
     return self._iterator_factory()

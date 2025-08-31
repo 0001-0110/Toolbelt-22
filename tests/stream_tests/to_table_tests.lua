@@ -9,7 +9,7 @@ function to_table_tests.empty_stream()
 end
 
 function to_table_tests.array_input()
-    local result = Stream.from({"a", "b", "c"}):to_table()
+    local result = Stream.from({ "a", "b", "c" }):to_table()
     assert(result[1] == "a", "Expected index 1 = 'a'")
     assert(result[2] == "b", "Expected index 2 = 'b'")
     assert(result[3] == "c", "Expected index 3 = 'c'")

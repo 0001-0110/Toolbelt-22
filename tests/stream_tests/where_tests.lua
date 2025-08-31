@@ -40,30 +40,33 @@ end
 -- Test empty table
 function where_tests.empty_table()
     local input = {}
-    local result = Stream.from(input):where(function(_, _)
-        return true
-    end)
-    :to_table()
+    local result = Stream.from(input)
+        :where(function(_, _)
+            return true
+        end)
+        :to_table()
     assert(utils.count(result) == 0)
 end
 
 -- Test all filtered out
 function where_tests.all_filtered()
     local input = { x = 10, y = 20 }
-    local result = Stream.from(input):where(function(_, value)
-        return value > 100
-    end)
-    :to_table()
+    local result = Stream.from(input)
+        :where(function(_, value)
+            return value > 100
+        end)
+        :to_table()
     assert(utils.count(result) == 0)
 end
 
 -- Test that keystream and valuestream are preserved
 function where_tests.keys_and_values()
     local input = { foo = "bar", hello = "world" }
-    local result = Stream.from(input):where(function(key, _)
-        return key == "foo"
-    end)
-    :to_table()
+    local result = Stream.from(input)
+        :where(function(key, _)
+            return key == "foo"
+        end)
+        :to_table()
     assert(result["foo"] == "bar")
     assert(result["hello"] == nil)
 end
