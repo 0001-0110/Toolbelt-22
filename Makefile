@@ -1,7 +1,11 @@
-.PHONY: test archive clean
+.PHONY: test coverage archive clean
 
 test:
 	lua tests/test_runner.lua
+
+coverage: clean
+	lua -lluacov tests/test_runner.lua
+	luacov
 
 archive: clean
 	MOD_NAME=$$(jq -r '.name' info.json) && \
@@ -11,4 +15,4 @@ archive: clean
 	git archive --format=zip --prefix="$$MOD_NAME/" --output="$$ZIP_NAME" HEAD
 
 clean:
-	rm -rf *.zip
+	rm -rf *.out *.zip

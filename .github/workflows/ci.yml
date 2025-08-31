@@ -39,6 +39,28 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y luarocks
-          sudo luarocks install luacheck
       - name: Run testsuite
         run: make test
+
+  coverage:
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install lua
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y luarocks
+          sudo luarocks install luacov
+      - name: Run tests with coverage
+        run: make coverage
+      - name: Read coverage %
+        id: coverage
+        run: |
+          coverage=$(awk '/^Total/ {print $4}' luacov.report.out | tr -d '%')
+          echo "coverage=$coverage" >> $GITHUB_OUTPUT
+      - name: Fail if coverage too low
+        if: ${{ steps.coverage.outputs.coverage < 95 }}
+        run: |
+          echo "Coverage too low: ${{ steps.coverage.outputs.coverage }}%"
+          exit 1
