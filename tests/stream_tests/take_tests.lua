@@ -4,7 +4,7 @@ local Stream = require("tools.stream")
 local take_tests = {}
 
 function take_tests.basic()
-    local input = {1, 2, 3, 4, 5}
+    local input = { 1, 2, 3, 4, 5 }
     local result = Stream.from(input):take(3):to_table()
 
     assert(#result == 3, "Expected 3 elements")
@@ -14,14 +14,14 @@ function take_tests.basic()
 end
 
 function take_tests.zero()
-    local input = {1, 2, 3}
+    local input = { 1, 2, 3 }
     local result = Stream.from(input):take(0):to_table()
 
     assert(#result == 0, "Expected 0 elements")
 end
 
 function take_tests.more_than_available()
-    local input = {10, 20}
+    local input = { 10, 20 }
     local result = Stream.from(input):take(5):to_table()
 
     assert(#result == 2, "Expected 2 elements")
@@ -29,10 +29,13 @@ function take_tests.more_than_available()
 end
 
 function take_tests.with_where()
-    local input = {1, 2, 3, 4, 5}
-    local result = Stream.from(input):where(function(_, value)
+    local input = { 1, 2, 3, 4, 5 }
+    local result = Stream.from(input)
+        :where(function(_, value)
             return value % 2 == 1
-        end):take(2):to_table()
+        end)
+        :take(2)
+        :to_table()
 
     assert(utils.count(result) == 2, "Expected 2 elements after filtering")
     assert(result[1] == 1 and result[3] == 3, "Filtered elements mismatch")

@@ -16,14 +16,14 @@ function to_table_tests.array_input()
 end
 
 function to_table_tests.map_input()
-    local input = {x = 1, y = 2}
+    local input = { x = 1, y = 2 }
     local result = Stream.from(input):to_table()
     assert(result.x == 1, "Expected key 'x' = 1")
     assert(result.y == 2, "Expected key 'y' = 2")
 end
 
 function to_table_tests.mixed_keys()
-    local input = {10, 20, z = 30}
+    local input = { 10, 20, z = 30 }
     local result = Stream.from(input):to_table()
     assert(result[1] == 10, "Expected index 1 = 10")
     assert(result[2] == 20, "Expected index 2 = 20")

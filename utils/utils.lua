@@ -23,7 +23,7 @@ function utils.is_list(data)
     end
 
     local count = 0
-    for key, value in pairs(data) do
+    for key, _ in pairs(data) do
         if type(key) ~= "number" then
             return false
         end
