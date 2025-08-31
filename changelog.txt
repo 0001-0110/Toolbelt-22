@@ -1,3 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version:
-Date:
+Version: 0.1.0
+Date: 2025-08-31
+  Scripting:
+    - Added some utility functions
+    - Added streams with some functions to ease the use of tables and arrays
