@@ -4,7 +4,7 @@ local Stream = require("tools.stream")
 local flat_map_tests = {}
 
 function flat_map_tests.basic_flatten()
-    local input = { {1, 2}, {3}, {4, 5} }
+    local input = { { 1, 2 }, { 3 }, { 4, 5 } }
     local result = Stream.from(input)
         :flat_map(function(inner)
             return inner
@@ -18,7 +18,7 @@ function flat_map_tests.basic_flatten()
 end
 
 function flat_map_tests.empty_lists()
-    local input = { {}, {1}, {}, {2, 3}, {} }
+    local input = { {}, { 1 }, {}, { 2, 3 }, {} }
     local result = Stream.from(input)
         :flat_map(function(inner)
             return inner
