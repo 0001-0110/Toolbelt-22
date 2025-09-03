@@ -2,6 +2,7 @@ std = {
     globals = {
         "require",
         "type",
+        "tostring",
         "string",
         "table",
         "print",
@@ -15,6 +16,8 @@ std = {
         "os",
         "setmetatable",
 
+        "serpent",
+
         "data",
         "script",
         "mods",
@@ -22,5 +25,8 @@ std = {
         "game",
         "defines",
         "prototypes",
+        "print",
+
+        "log",
     },
 }

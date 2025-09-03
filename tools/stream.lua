@@ -170,4 +170,49 @@ function Stream:take(count)
     return create_stream(take_iterator_factory)
 end
 
+--- Applies a function to each element and flattens the results into a single stream.
+--- The mapping function should return a table of values.
+--- @generic TValue, TResult
+--- @param selector fun(value: TValue): table<any, TResult>
+--- @return Stream<number, TResult>
+function Stream:flat_map(selector)
+    local function flat_map_iterator_factory()
+        local outer_iterator, outer_state, outer_key = self:iterate()
+        local inner_table, inner_key
+        local output_index = 0
+
+        local function flat_map_iterator(_, _)
+            -- While loop is necessary in case we need to skip outer elements, like an empty list that would not yield
+            -- any inner element
+            while true do
+                -- If no active inner_table, advance outer iterator
+                if inner_table == nil then
+                    local outer_value
+                    outer_key, outer_value = outer_iterator(outer_state, outer_key)
+                    if outer_key == nil then
+                        return nil, nil -- outer exhausted
+                    end
+                    inner_table = selector(outer_value)
+                    inner_key = nil
+                end
+
+                -- Try to get next inner value
+                local inner_value
+                inner_key, inner_value = next(inner_table, inner_key)
+                if inner_key ~= nil then
+                    output_index = output_index + 1
+                    return output_index, inner_value
+                else
+                    -- inner exhausted, reset and loop back to outer
+                    inner_table = nil
+                end
+            end
+        end
+
+        return flat_map_iterator, nil, nil
+    end
+
+    return create_stream(flat_map_iterator_factory)
+end
+
 return Stream
