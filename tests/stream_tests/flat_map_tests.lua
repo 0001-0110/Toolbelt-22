@@ -26,8 +26,7 @@ function flat_map_tests.empty_lists()
         :to_table()
 
     assert(utils.count(result) == 3, "Expected 3 elements")
-    assert(result[1] == 1 and result[2] == 2 and result[3] == 3,
-        "Flattened elements mismatch")
+    assert(result[1] == 1 and result[2] == 2 and result[3] == 3, "Flattened elements mismatch")
 end
 
 function flat_map_tests.map_to_custom()
